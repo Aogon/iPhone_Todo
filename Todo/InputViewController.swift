@@ -19,7 +19,12 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func save() {
-        
+        let optionalTitle: String = titleTextField.text!
+        if optionalTitle.isEmpty {
+            print("タイトルが未入力")
+        }else{
+            print(optionalTitle)
+        }
     }
     
     @IBAction func cancel() {
@@ -29,6 +34,8 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    
     
     /*
     // MARK: - Navigation

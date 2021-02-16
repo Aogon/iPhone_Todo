@@ -86,7 +86,7 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Save"/>
                                 <connections>
-                                    <action selector="save:" destination="Egp-dX-qaX" eventType="touchUpInside" id="h18-7d-YOd"/>
+                                    <action selector="save" destination="Egp-dX-qaX" eventType="touchUpInside" id="GrT-mu-aPw"/>
                                 </connections>
                             </button>
                         </subviews>
