@@ -39,6 +39,7 @@
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="iUN-g5-MSq">
                             <connections>
                                 <action selector="add:" destination="BYZ-38-t0r" id="ws5-y8-x2r"/>
+                                <segue destination="Egp-dX-qaX" kind="presentation" id="kJv-VJ-MZ5"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -120,6 +121,9 @@
             <point key="canvasLocation" x="18.840579710144929" y="79.6875"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="kJv-VJ-MZ5"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

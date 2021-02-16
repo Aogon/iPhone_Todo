@@ -7,21 +7,27 @@
 
 import UIKit
 
-class InputViewController: UIViewController {
+class InputViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var titleTextField: UITextField!
     @IBOutlet var deadlineDatePicker: UIDatePicker!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        titleTextField.delegate = self
         // Do any additional setup after loading the view.
     }
     
     @IBAction func save() {
+        
     }
     
     @IBAction func cancel() {
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
     /*
