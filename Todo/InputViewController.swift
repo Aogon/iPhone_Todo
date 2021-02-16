@@ -26,7 +26,14 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    @IBAction func save() {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toView" {
+            save()
+            let vc = segue.destination as! ViewController
+        }
+    }
+    
+    func save() {
         let optionalTitle: String = titleTextField.text!
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
@@ -41,7 +48,6 @@ class InputViewController: UIViewController, UITextFieldDelegate {
                 try realm.write {
                     realm.add(todoItem)
                     print(realm.objects(TodoItem.self))
-                    self.performSegue(withIdentifier: "toView", sender: nil)
                 }
             } catch let error as NSError {
                 

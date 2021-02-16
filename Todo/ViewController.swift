@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class ViewController: UIViewController, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     @IBOutlet var table: UITableView!
     
@@ -22,6 +22,15 @@ class ViewController: UIViewController, UITableViewDataSource {
         todoItems = realm.objects(TodoItem.self)
         
                 
+    }
+    
+    @IBAction func myUnwindAction(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
+        if unwindSegue.identifier == "toView" {
+            todoItems = realm.objects(TodoItem.self)
+            table.reloadData()
+        }
+        
+        print("reload")
     }
     
 
@@ -38,6 +47,14 @@ class ViewController: UIViewController, UITableViewDataSource {
             cell?.detailTextLabel?.text = todoItems[indexPath.row].deadline
         }
         return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        try! realm.write{
+            realm.delete(todoItems[indexPath.row])
+            todoItems = realm.objects(TodoItem.self)
+        }
+        tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
 }
