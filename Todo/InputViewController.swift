@@ -12,14 +12,22 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var titleTextField: UITextField!
     @IBOutlet var deadlineDatePicker: UIDatePicker!
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         titleTextField.delegate = self
         // Do any additional setup after loading the view.
+        deadlineDatePicker.preferredDatePickerStyle = .inline
+        deadlineDatePicker.datePickerMode = .date
+        
+        
     }
     
     @IBAction func save() {
         let optionalTitle: String = titleTextField.text!
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        print(formatter.string(from: deadlineDatePicker.date))
         if optionalTitle.isEmpty {
             print("タイトルが未入力")
         }else{
