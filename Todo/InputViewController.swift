@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import RealmSwift
 
 class InputViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet var titleTextField: UITextField!
     @IBOutlet var deadlineDatePicker: UIDatePicker!
+    
+    var realm: Realm!
     
     
     override func viewDidLoad() {
@@ -32,7 +35,21 @@ class InputViewController: UIViewController, UITextFieldDelegate {
             print("タイトルが未入力")
         }else{
             print(optionalTitle)
+            let todoItem = TodoItem(title: optionalTitle, deadline: formatter.string(from: deadlineDatePicker.date))
+            let realm = try! Realm()
+            do {
+                try realm.write {
+                    realm.add(todoItem)
+                    print(realm.objects(TodoItem.self))
+                    self.performSegue(withIdentifier: "toView", sender: nil)
+                }
+            } catch let error as NSError {
+                
+            }
         }
+        
+        
+        
     }
     
     @IBAction func cancel() {
@@ -42,6 +59,8 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    
     
     
     
