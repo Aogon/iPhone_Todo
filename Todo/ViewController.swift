@@ -12,10 +12,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet var table: UITableView!
     
+
     let realm = try! Realm()
     var todoItems: Results<TodoItem>!
     
     var selectedIndexPath: IndexPath!
+    var selectedTitle: String!
+    var selectedDeadline: Date!
+    
     let formatter = DateFormatter()
     
     override func viewDidLoad() {
@@ -34,6 +38,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         if segue.identifier == "toInputView" {
             let inputViewController = segue.destination as! InputViewController
             inputViewController.selectedIndexPath = self.selectedIndexPath
+            inputViewController.selectedTitle = self.selectedTitle
+            inputViewController.selectedDeadline = self.selectedDeadline
             inputViewController.isEditable = true
         }
     }
@@ -71,9 +77,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "toNextViewContoller", sender: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndexPath = indexPath
+        selectedTitle = todoItems[selectedIndexPath.row].title
+        selectedDeadline = todoItems[selectedIndexPath.row].deadline
+        performSegue(withIdentifier: "toInputView", sender: nil)
+        
     }
     
 }

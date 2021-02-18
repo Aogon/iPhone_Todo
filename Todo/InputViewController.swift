@@ -15,6 +15,8 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     
     var realm: Realm!
     var selectedIndexPath: IndexPath!
+    var selectedTitle: String!
+    var selectedDeadline: Date!
     var isEditable: Bool = false
     var todoItems: Results<TodoItem>!
     
@@ -28,8 +30,8 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         deadlineDatePicker.preferredDatePickerStyle = .inline
         deadlineDatePicker.datePickerMode = .date
         if isEditable {
-            todoItems = realm.objects(TodoItem.self)
-            titleTextField.text = todoItems[selectedIndexPath.row].title
+            titleTextField.text = selectedTitle
+            deadlineDatePicker.setDate(selectedDeadline, animated: true)
         }
         formatter.dateStyle = .medium
         formatter.locale = Locale(identifier: "ja_JP")
@@ -57,7 +59,16 @@ class InputViewController: UIViewController, UITextFieldDelegate {
             let realm = try! Realm()
             do {
                 try realm.write {
-                    realm.add(todoItem)
+                    if isEditable {
+                        todoItems = realm.objects(TodoItem.self)
+                        let selectedTodoItem: TodoItem = todoItems[selectedIndexPath.row]
+                        selectedTodoItem.title = todoItem.title
+                        selectedTodoItem.deadline = todoItem.deadline
+                        isEditable = false
+                    }else{
+                        realm.add(todoItem)
+                    }
+                    
                     print(realm.objects(TodoItem.self))
                 }
             } catch let error as NSError {
