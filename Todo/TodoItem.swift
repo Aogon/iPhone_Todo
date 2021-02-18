@@ -9,9 +9,9 @@ import RealmSwift
 class TodoItem : Object {
     @objc dynamic var id: ObjectId = ObjectId.generate()
     @objc dynamic var title: String = ""
-    @objc dynamic var deadline: String = ""
+    @objc dynamic var deadline: Date!
     
-    convenience init(title: String, deadline: String) {
+    convenience init(title: String, deadline: Date) {
         self.init()
         self.title = title
         self.deadline = deadline

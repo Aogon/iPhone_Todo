@@ -16,6 +16,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var todoItems: Results<TodoItem>!
     
     var selectedIndexPath: IndexPath!
+    let formatter = DateFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         table.delegate = self
         // Do any additional setup after loading the view.
         todoItems = realm.objects(TodoItem.self)
+        formatter.dateStyle = .medium
+        formatter.locale = Locale(identifier: "ja_JP")
         
                 
     }
@@ -55,7 +58,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
         for todoItem in todoItems{
             cell?.textLabel?.text = todoItems[indexPath.row].title
-            cell?.detailTextLabel?.text = todoItems[indexPath.row].deadline
+            cell?.detailTextLabel?.text = formatter.string(from: todoItems[indexPath.row].deadline)
         }
         return cell!
     }

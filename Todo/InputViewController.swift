@@ -18,17 +18,21 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     var isEditable: Bool = false
     var todoItems: Results<TodoItem>!
     
+    let formatter = DateFormatter()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         titleTextField.delegate = self
         // Do any additional setup after loading the view.
         deadlineDatePicker.preferredDatePickerStyle = .inline
-        deadlineDatePicker.datePickerMode = .dateAndTime
+        deadlineDatePicker.datePickerMode = .date
         if isEditable {
             todoItems = realm.objects(TodoItem.self)
             titleTextField.text = todoItems[selectedIndexPath.row].title
         }
+        formatter.dateStyle = .medium
+        formatter.locale = Locale(identifier: "ja_JP")
         
         
     }
@@ -42,15 +46,14 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     
     func save() {
         let optionalTitle: String = titleTextField.text!
-        let formatter = DateFormatter()
-        formatter.dateStyle = .full
-        formatter.locale = Locale(identifier: "ja_JP")
+        
+        
         print(formatter.string(from: deadlineDatePicker.date))
         if optionalTitle.isEmpty {
             print("タイトルが未入力")
         }else{
             print(optionalTitle)
-            let todoItem = TodoItem(title: optionalTitle, deadline: formatter.string(from: deadlineDatePicker.date))
+            let todoItem = TodoItem(title: optionalTitle, deadline: deadlineDatePicker.date)
             let realm = try! Realm()
             do {
                 try realm.write {
