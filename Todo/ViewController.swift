@@ -15,13 +15,24 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     let realm = try! Realm()
     var todoItems: Results<TodoItem>!
     
+    var selectedIndexPath: IndexPath!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         table.dataSource = self
+        table.delegate = self
         // Do any additional setup after loading the view.
         todoItems = realm.objects(TodoItem.self)
         
                 
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toInputView" {
+            let inputViewController = segue.destination as! InputViewController
+            inputViewController.selectedIndexPath = self.selectedIndexPath
+            inputViewController.isEditable = true
+        }
     }
     
     @IBAction func myUnwindAction(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
@@ -55,6 +66,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             todoItems = realm.objects(TodoItem.self)
         }
         tableView.deleteRows(at: [indexPath], with: .automatic)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "toNextViewContoller", sender: nil)
+        selectedIndexPath = indexPath
     }
     
 }

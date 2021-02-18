@@ -14,6 +14,9 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet var deadlineDatePicker: UIDatePicker!
     
     var realm: Realm!
+    var selectedIndexPath: IndexPath!
+    var isEditable: Bool = false
+    var todoItems: Results<TodoItem>!
     
     
     override func viewDidLoad() {
@@ -21,7 +24,11 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         titleTextField.delegate = self
         // Do any additional setup after loading the view.
         deadlineDatePicker.preferredDatePickerStyle = .inline
-        deadlineDatePicker.datePickerMode = .date
+        deadlineDatePicker.datePickerMode = .dateAndTime
+        if isEditable {
+            todoItems = realm.objects(TodoItem.self)
+            titleTextField.text = todoItems[selectedIndexPath.row].title
+        }
         
         
     }
@@ -36,7 +43,8 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     func save() {
         let optionalTitle: String = titleTextField.text!
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
+        formatter.dateStyle = .full
+        formatter.locale = Locale(identifier: "ja_JP")
         print(formatter.string(from: deadlineDatePicker.date))
         if optionalTitle.isEmpty {
             print("タイトルが未入力")
