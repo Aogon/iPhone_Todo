@@ -52,6 +52,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="tcm-lp-D4L">
+                        <barButtonItem key="leftBarButtonItem" systemItem="edit" id="cVd-0G-87G"/>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="iUN-g5-MSq">
                             <connections>
                                 <action selector="add:" destination="BYZ-38-t0r" id="ws5-y8-x2r"/>

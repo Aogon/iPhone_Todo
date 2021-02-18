@@ -81,6 +81,7 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func cancel() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
