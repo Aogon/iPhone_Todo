@@ -27,9 +27,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         table.dataSource = self
         table.delegate = self
         // Do any additional setup after loading the view.
-        todoItems = realm.objects(TodoItem.self)
+        todoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
+        
         formatter.dateStyle = .medium
         formatter.locale = Locale(identifier: "ja_JP")
+        
         
                 
     }
@@ -44,18 +46,23 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
     }
     
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-        table.isEditing = true
-    }
+    
     
     @IBAction func myUnwindAction(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
         if unwindSegue.identifier == "toView" {
-            todoItems = realm.objects(TodoItem.self)
+            todoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
             table.reloadData()
         }
         
         print("reload")
+    }
+    
+    @IBAction func edit(){
+        if(table.isEditing){
+            table.setEditing(false, animated: true)
+        } else {
+            table.setEditing(true, animated: true)
+        }
     }
     
 
@@ -77,7 +84,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         try! realm.write{
             realm.delete(todoItems[indexPath.row])
-            todoItems = realm.objects(TodoItem.self)
+            todoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
+            for todoItem in todoItems {
+                if todoItem.order > indexPath.row {
+                    todoItem.order -= 1
+                }
+            }
         }
         tableView.deleteRows(at: [indexPath], with: .automatic)
     }
@@ -98,9 +110,33 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return true
     }
     
-//    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        <#code#>
-//    }
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        var itemsArray = Array(todoItems)
+        let movedItem = itemsArray[sourceIndexPath.row]
+        itemsArray.remove(at: sourceIndexPath.row)
+        itemsArray.insert(movedItem, at: destinationIndexPath.row)
+        todoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
+        try! realm.write{
+            if sourceIndexPath.row > destinationIndexPath.row{
+                for i in 0..<todoItems.count {
+                    if i == sourceIndexPath.row {
+                        todoItems[i].order = destinationIndexPath.row
+                    }else if destinationIndexPath.row <= i && i < sourceIndexPath.row {
+                        todoItems[i].order += 1
+                    }
+                }
+            }else{
+                for i in 0..<todoItems.count {
+                    if i == sourceIndexPath.row {
+                        todoItems[i].order = destinationIndexPath.row
+                    }else if sourceIndexPath.row < i && i <= destinationIndexPath.row {
+                        todoItems[i].order -= 1
+                    }
+                }
+            }
+            
+        }
+    }
     
     
 }

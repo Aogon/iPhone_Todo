@@ -66,6 +66,12 @@ class InputViewController: UIViewController, UITextFieldDelegate {
                         selectedTodoItem.deadline = todoItem.deadline
                         isEditable = false
                     }else{
+                        let sortedTodoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
+                        print("sorted")
+                        print(sortedTodoItems)
+                        print(sortedTodoItems.last)
+                        todoItem.order = (sortedTodoItems.last?.order ?? -1) + 1
+                        print(sortedTodoItems.last?.order ?? 0)
                         realm.add(todoItem)
                     }
                     

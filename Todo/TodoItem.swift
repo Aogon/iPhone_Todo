@@ -8,6 +8,7 @@ import RealmSwift
 
 class TodoItem : Object {
     @objc dynamic var id: ObjectId = ObjectId.generate()
+    @objc dynamic var order: Int = 0
     @objc dynamic var title: String = ""
     @objc dynamic var deadline: Date!
     
