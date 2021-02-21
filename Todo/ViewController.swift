@@ -12,6 +12,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @IBOutlet var table: UITableView!
     
+    
 
     let realm = try! Realm()
     var todoItems: Results<TodoItem>!
@@ -37,9 +38,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         formatter.dateStyle = .medium
         formatter.timeStyle = .medium
         formatter.locale = Locale(identifier: "ja_JP")
+        navigationItem.leftBarButtonItem = editButtonItem
+        
+        
+        
+        
+        
+       
+        
+    
+        
+        
         
         
     }
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toInputView" {
             let inputViewController = segue.destination as! InputViewController
@@ -48,6 +62,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             inputViewController.selectedDeadline = self.selectedDeadline
             inputViewController.isEditable = true
         }
+    }
+    
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated:animated)
+       if(self.isEditing)
+       {
+        table.isEditing = true
+       }else
+       {
+        table.isEditing = false
+       }
     }
     
     
@@ -61,13 +87,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         print("reload")
     }
     
-    @IBAction func edit(){
-        if(table.isEditing){
-            table.setEditing(false, animated: true)
-        } else {
-            table.setEditing(true, animated: true)
-        }
-    }
+//    @IBAction func edit(){
+//        if(table.isEditing){
+//            table.setEditing(false, animated: true)
+//
+//
+//        } else {
+//            table.setEditing(true, animated: true)
+//
+//        }
+//    }
+    
     
 
     
