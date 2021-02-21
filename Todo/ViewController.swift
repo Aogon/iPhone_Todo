@@ -22,6 +22,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     let formatter = DateFormatter()
     
+    let today = Date()
+    let twoWeeksLater = Date(timeIntervalSinceNow: 60 * 60 * 24 * 14)
+    let threeDaysLater = Date(timeIntervalSinceNow: 60 * 60 * 24 * 3)
+    let tomorrow = Date(timeIntervalSinceNow: 60 * 60 * 24)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         table.dataSource = self
@@ -30,12 +35,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         todoItems = realm.objects(TodoItem.self).sorted(byKeyPath: "order")
         
         formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
         formatter.locale = Locale(identifier: "ja_JP")
         
         
-                
     }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "toInputView" {
             let inputViewController = segue.destination as! InputViewController
@@ -77,6 +81,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         for todoItem in todoItems{
             cell?.textLabel?.text = todoItems[indexPath.row].title
             cell?.detailTextLabel?.text = formatter.string(from: todoItems[indexPath.row].deadline)
+            if todoItems[indexPath.row].deadline < today{
+                cell?.contentView.backgroundColor = UIColor.gray.withAlphaComponent(0.5)
+            
+            }else if todoItems[indexPath.row].deadline < tomorrow {
+                cell?.contentView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
+            }else if todoItems[indexPath.row].deadline < threeDaysLater{
+                cell?.contentView.backgroundColor = UIColor.yellow.withAlphaComponent(0.5)
+            }else if todoItems[indexPath.row].deadline < twoWeeksLater{
+                cell?.contentView.backgroundColor = UIColor.green.withAlphaComponent(0.5)
+            }else{
+                cell?.contentView.backgroundColor = UIColor.white
+            }
+            
         }
         return cell!
     }

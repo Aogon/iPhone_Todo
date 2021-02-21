@@ -28,12 +28,14 @@ class InputViewController: UIViewController, UITextFieldDelegate {
         titleTextField.delegate = self
         // Do any additional setup after loading the view.
         deadlineDatePicker.preferredDatePickerStyle = .inline
-        deadlineDatePicker.datePickerMode = .date
+        deadlineDatePicker.datePickerMode = .dateAndTime
+        deadlineDatePicker.locale = Locale(identifier: "ja-JP")
         if isEditable {
             titleTextField.text = selectedTitle
             deadlineDatePicker.setDate(selectedDeadline, animated: true)
         }
         formatter.dateStyle = .medium
+        formatter.timeStyle = .medium
         formatter.locale = Locale(identifier: "ja_JP")
         
         
@@ -48,8 +50,6 @@ class InputViewController: UIViewController, UITextFieldDelegate {
     
     func save() {
         let optionalTitle: String = titleTextField.text!
-        
-        
         print(formatter.string(from: deadlineDatePicker.date))
         if optionalTitle.isEmpty {
             print("タイトルが未入力")
